@@ -43,15 +43,16 @@ class Retriever:
             Requêtes SQL et Classe (MySQL ou Postgres)
         """
         self.db = {
-            "CLASS": mysql if self.vars["DB_TYPE"].upper() == "MYSQL" or self.vars[
-                "DB_TYPE"].upper() == "MARIADB" else psycopg2,
+            "CLASS": mysql if self.vars["DB_TYPE"].upper() == "MYSQL" or self.vars["DB_TYPE"].upper() == "MARIADB" else psycopg2,
 
             "GET_MAX_ID_REQUEST": "SELECT next_val FROM hibernate_sequences WHERE sequence_name='SBI_USER';",
             "GET_USERS": "SELECT DISTINCT USER_ID FROM SBI_USER;",
 
             "UPDATE_SEQUENCE_REQUEST": "UPDATE hibernate_sequences SET next_val=%(new_val)s WHERE next_val=%(old_val)s and sequence_name='SBI_USER';",
-            "INSERT_REQUEST": "INSERT INTO SBI_USER (USER_ID, FULL_NAME, USER_IN, ORGANIZATION, ID) VALUES (%(uid)s, %(uid)s, 'biadmin', 'DEFAULT_TENANT', %(id)s);",
+            "INSERT_USER": "INSERT INTO SBI_USER (USER_ID, FULL_NAME, USER_IN, ORGANIZATION, ID, IS_SUPERADMIN) VALUES (%(uid)s, %(uid)s, 'biadmin', 'DEFAULT_TENANT', %(id)s, %(admin)s);",
+            "INSERT_ROLE": "INSERT INTO SBI_EXT_USER_ROLES (`ID`, `EXT_ROLE_ID`, `USER_IN`) VALUES (%(id)s, 4, 'server')",
             "DELETE_REQUEST": "DELETE FROM SBI_USER WHERE USER_ID = %(uid)s;",
+
 
         }
 
@@ -134,7 +135,8 @@ class Retriever:
         self.__execute_query__(query=self.db["UPDATE_SEQUENCE_REQUEST"],
                                values={"new_val": next_id + 1, "old_val": next_id})
 
-        self.__execute_query__(query=self.db["INSERT_REQUEST"], values={"uid": uid, "id": next_id})
+        self.__execute_query__(query=self.db["INSERT_USER"], values={"uid": uid, "id": next_id, "admin": 1 if 'admin' in uid else 0})
+        self.__execute_query__(query=self.db["INSERT_ROLE"], values={"id": next_id})
 
     def __get_users_from_knowage__(self):
         users = self.__execute_query__(query=self.db["GET_USERS"], fetch_all=True)
@@ -171,8 +173,12 @@ class Retriever:
         ldap_users = self.__get_users_from_ldap__()
         ldap_users_not_in_knowage = []
 
+        print(f"found {len(ldap_users)} users in ldap")
+
         knowage_users = self.__get_users_from_knowage__()
         knowage_users_not_in_ldap = []
+
+        print(f"found {len(knowage_users)} users in knowage")
 
         if len(ldap_users) == 0:
             self.log("No user was found in LDAP or connexion was unsuccessful. Please, check your configuration :")
@@ -186,6 +192,9 @@ class Retriever:
                 if ldap_user not in knowage_users:
                     ldap_users_not_in_knowage.append(ldap_user)
                     self.__add_user_to_knowage__(ldap_user)
+
+            print("self.admin_knowage_users")
+            print(self.admin_knowage_users)
 
             # Suppression des utilisateurs qui ne sont plus dans ldap
             for knowage_user in knowage_users:
