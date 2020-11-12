@@ -6,6 +6,6 @@ RUN apk update --no-cache \
 RUN apk update --no-cache \
     && apk add py3-pip gcc python3-dev musl-dev postgresql-dev \
     && pip3 install psycopg2-binary ldap3 \
-    && apk del py3-pip gcc python3-dev musl-dev postgresql-dev
+    && apk del py3-pip gcc python3-dev musl-dev
 
 ADD ./conf /
