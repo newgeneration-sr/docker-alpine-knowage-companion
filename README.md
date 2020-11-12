@@ -11,12 +11,12 @@ Here we use the same configuration parameter names that knowage for easier confi
 - PROVIDER_URL=127.0.0.1 (LDAP URL)
 - LDAP_PORT=389 (LDAP PORT)
 
-- TYPE=MARIADB (Database type, the companion also handle postgresql)
-- DB=knowage (Database name)
-- USER=knowage (Database username)
-- PASS=knowage (Database user password)
-- HOST=127.0.0.1 (Database URL)
-- PORT=3306 (Database port)
+- DB_TYPE=MARIADB (Database type, the companion also handle postgresql)
+- DB_DB=knowage (Database name)
+- DB_USER=knowage (Database username)
+- DB_PASS=knowage (Database user password)
+- DB_HOST=127.0.0.1 (Database URL)
+- DB_PORT=3306 (Database port)
 
 ## Compose example :
 
