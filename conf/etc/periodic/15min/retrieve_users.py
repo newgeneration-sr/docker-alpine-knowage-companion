@@ -43,8 +43,8 @@ class Retriever:
             Requêtes SQL et Classe (MySQL ou Postgres)
         """
         self.db = {
-            "CLASS": mysql if self.vars["TYPE"].upper() == "MYSQL" or self.vars[
-                "TYPE"].upper() == "MARIADB" else psycopg2,
+            "CLASS": mysql if self.vars["DB_TYPE"].upper() == "MYSQL" or self.vars[
+                "DB_TYPE"].upper() == "MARIADB" else psycopg2,
 
             "GET_MAX_ID_REQUEST": "SELECT next_val FROM hibernate_sequences WHERE sequence_name='SBI_USER';",
             "GET_USERS": "SELECT DISTINCT USER_ID FROM SBI_USER;",
