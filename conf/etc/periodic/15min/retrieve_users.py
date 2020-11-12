@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/with-contenv /usr/bin/python3
 
 from ldap3 import Server, Connection, ALL, NTLM, SUBTREE, NONE
 from datetime import datetime
