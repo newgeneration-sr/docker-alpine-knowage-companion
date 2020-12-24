@@ -1,6 +1,10 @@
+![docker build automated](https://img.shields.io/docker/cloud/automated/dotriver/knowage-companion)
+![docker build status](https://img.shields.io/docker/cloud/build/dotriver/knowage-companion)
+![docker build status](https://img.shields.io/docker/cloud/pulls/dotriver/knowage-companion)
+
 # Docker Alpine Knowage Companion + S6 Overlay
 
-## Auto configuration parameters 
+# Auto configuration parameters 
 
 Here we use the same configuration parameter names that knowage for easier configuration.
 
@@ -55,7 +59,7 @@ Here we use the same configuration parameter names that knowage for easier confi
         - "3306:3306"
     
       cron:
-        build: .
+        image: dotriver/knowage-companion
         environment:
           - SEARCH_USER_BEFORE_USER=uid=admin,dc=example,dc=com
           - SEARCH_USER_BEFORE_PSW=password
