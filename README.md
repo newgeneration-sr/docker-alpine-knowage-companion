@@ -1,6 +1,6 @@
 ![docker build automated](https://img.shields.io/docker/cloud/automated/dotriver/knowage-companion)
 ![docker build status](https://img.shields.io/docker/cloud/build/dotriver/knowage-companion)
-![docker build status](https://img.shields.io/docker/cloud/pulls/dotriver/knowage-companion)
+![docker build status](https://img.shields.io/docker/pulls/dotriver/knowage-companion)
 
 # Docker Alpine Knowage Companion + S6 Overlay
 
